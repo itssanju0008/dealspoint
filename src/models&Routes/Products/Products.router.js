@@ -27,13 +27,10 @@ router.post("/", async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!product_name  || !category || !mrp || !price) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Required fields: product_name, category, mrp, and price.",
-        });
+    if (!product_name || !category || !mrp || !price) {
+      return res.status(400).json({
+        error: "Required fields: product_name, category, mrp, and price.",
+      });
     }
 
     const newProduct = new Product({
@@ -41,8 +38,10 @@ router.post("/", async (req, res) => {
       keywords,
       brand,
       category,
-      pack_of,      pack,
-      type,keywords,
+      pack_of,
+      pack,
+      type,
+      keywords,
       review,
       gallery,
       review_count,
@@ -60,6 +59,8 @@ router.post("/", async (req, res) => {
 
     res.status(201).json(savedProduct);
   } catch (error) {
+    console.log({error});
+    
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -179,12 +180,10 @@ router.put("/:id", async (req, res) => {
 
     // Validate required fields
     if (!product_name || !brand || !category || !mrp || !price) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Required fields: product_name, brand, category, mrp, and price.",
-        });
+      return res.status(400).json({
+        error:
+          "Required fields: product_name, brand, category, mrp, and price.",
+      });
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -199,7 +198,8 @@ router.put("/:id", async (req, res) => {
         category,
         review,
         review_count,
-        product_description,pack_of,
+        product_description,
+        pack_of,
         specifications,
         keywords,
         variations,
