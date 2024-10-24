@@ -5,7 +5,7 @@ const Product = require("./Products.model"); // Adjust the file path as needed
 // CREATE a new product
 router.post("/", async (req, res) => {
   try {
-    const { product_name, keywords, brand, category, review, review_count, description, specifications, variations, seller, past_sold, thumbnail, mrp, price } = req.body;
+    const { product_name, keywords, brand, category, review, review_count, product_description, specifications, variations, seller, past_sold, thumbnail, mrp, price } = req.body;
 
     // Validate required fields
     if (!product_name || !brand || !category || !mrp || !price) {
@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
       category,
       review,
       review_count,
-      description,
+      product_description,
       specifications,
       variations,
       seller,
@@ -128,7 +128,7 @@ router.get("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { product_name, keywords, brand, category, review, review_count, description, specifications, variations, seller, past_sold, thumbnail, mrp, price } = req.body;
+    const { product_name, keywords, brand, category, review, review_count, product_description, specifications, variations, seller, past_sold, thumbnail, mrp, price } = req.body;
 
     // Validate required fields
     if (!product_name || !brand || !category || !mrp || !price) {
@@ -137,7 +137,7 @@ router.put("/:id", async (req, res) => {
 
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
-      { product_name, keywords, brand, category, review, review_count, description, specifications, variations, seller, past_sold, thumbnail, mrp, price },
+      { product_name, keywords, brand, category, review, review_count, product_description, specifications, variations, seller, past_sold, thumbnail, mrp, price },
       { new: true, runValidators: true }
     );
 

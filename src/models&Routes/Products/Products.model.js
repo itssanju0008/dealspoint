@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema(
     },
     review: Number,
     review_count: Number,
-    description: { type: String },
+    product_description: { type: String },
     specifications: { type: String },
     variations: [ ],
     seller: String,
