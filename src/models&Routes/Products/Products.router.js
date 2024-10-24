@@ -5,11 +5,35 @@ const Product = require("./Products.model"); // Adjust the file path as needed
 // CREATE a new product
 router.post("/", async (req, res) => {
   try {
-    const { product_name, keywords, brand, category, review, review_count, product_description, specifications, variations, seller, past_sold, thumbnail, mrp, price } = req.body;
+    const {
+      product_name,
+      keywords,
+      brand,
+      pack,
+      gallery,
+      type,
+      category,
+      review,
+      review_count,
+      product_description,
+      specifications,
+      variations,
+      seller,
+      past_sold,
+      thumbnail,
+      pack_of,
+      mrp,
+      price,
+    } = req.body;
 
     // Validate required fields
     if (!product_name || !brand || !category || !mrp || !price) {
-      return res.status(400).json({ error: "Required fields: product_name, brand, category, mrp, and price." });
+      return res
+        .status(400)
+        .json({
+          error:
+            "Required fields: product_name, brand, category, mrp, and price.",
+        });
     }
 
     const newProduct = new Product({
@@ -17,7 +41,10 @@ router.post("/", async (req, res) => {
       keywords,
       brand,
       category,
+      pack_of,      pack,
+      type,
       review,
+      gallery,
       review_count,
       product_description,
       specifications,
@@ -45,19 +72,19 @@ router.get("/", async (req, res) => {
     const perPage = parseInt(req.query.per_page) || 10; // Default per page is 10
 
     // Sorting (sort by price, review, etc.)
-    let sortField = req.query.sort || 'price'; // Default sort by 'price'
-    let sortOrder = req.query.order === 'desc' ? -1 : 1; // Default sort order is ascending
+    let sortField = req.query.sort || "price"; // Default sort by 'price'
+    let sortOrder = req.query.order === "desc" ? -1 : 1; // Default sort order is ascending
 
     // Filters: brand, category, price range
     const { brand, category, minPrice, maxPrice, search } = req.query;
-    
+
     const filter = {};
-    
+
     // Filter by brand
     if (brand) {
       filter.brand = brand; // Match the brand by ObjectId
     }
-    
+
     // Filter by category
     if (category) {
       filter.category = category; // Match the category by ObjectId
@@ -104,19 +131,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-
-
 router.get("/:slug", async (req, res) => {
   try {
     const { slug } = req.params;
 
-    
     // Find product by slug
     const product = await Product.findOne({ slug })
       .populate("brand", "name")
       .populate("category", "name")
       .lean();
-    
+
     if (!product) {
       return res.status(404).json({ error: "Product not found." });
     }
@@ -128,21 +152,62 @@ router.get("/:slug", async (req, res) => {
   }
 });
 
-
 // UPDATE a product by ID
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { product_name, keywords, brand, category, review, review_count, product_description, specifications, variations, seller, past_sold, thumbnail, mrp, price } = req.body;
+    const {
+      product_name,
+      keywords,
+      pack,
+      gallery,
+      type,
+      brand,
+      pack_of,
+      category,
+      review,
+      review_count,
+      product_description,
+      specifications,
+      variations,
+      seller,
+      past_sold,
+      thumbnail,
+      mrp,
+      price,
+    } = req.body;
 
     // Validate required fields
     if (!product_name || !brand || !category || !mrp || !price) {
-      return res.status(400).json({ error: "Required fields: product_name, brand, category, mrp, and price." });
+      return res
+        .status(400)
+        .json({
+          error:
+            "Required fields: product_name, brand, category, mrp, and price.",
+        });
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
-      { product_name, keywords, brand, category, review, review_count, product_description, specifications, variations, seller, past_sold, thumbnail, mrp, price },
+      {
+        product_name,
+        gallery,
+        keywords,
+        pack,
+        type,
+        brand,
+        category,
+        review,
+        review_count,
+        product_description,pack_of,
+        specifications,
+        variations,
+        seller,
+        past_sold,
+        thumbnail,
+        mrp,
+        price,
+      },
       { new: true, runValidators: true }
     );
 

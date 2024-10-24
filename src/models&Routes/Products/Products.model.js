@@ -22,10 +22,18 @@ const productSchema = new mongoose.Schema(
     specifications: { type: String },
     variations: [],
     seller: String,
+    gallery:[],
+    pack_of:Number,
     past_sold: Number,
     thumbnail: String,
     mrp: Number,
     price: Number,
+    pack:[],
+    type: {
+      type: String,
+      enum: ["product", "pack"], // Ensures only "product" or "pack" is allowed
+      required: true, // Optional: Ensures the type field is mandatory
+    },
   },
   { versionKey: false }
 );
