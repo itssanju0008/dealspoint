@@ -25,6 +25,7 @@ app.use(
       "http://localhost:3001",
       "http://localhost:3002",
       "https://carrystyle.in",
+      'https://www.carrystyle.in'
     ], // Fixing the CORS allowed origins
   })
 );
