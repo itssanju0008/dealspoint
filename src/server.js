@@ -23,6 +23,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
+      "http://localhost:3002",
       "https://carrystyle.in",
     ], // Fixing the CORS allowed origins
   })
