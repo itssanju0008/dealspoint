@@ -18,14 +18,7 @@ const productSchema = new mongoose.Schema(
     review_count: Number,
     description: { type: String },
     specifications: { type: String },
-    variations: [
-      {
-        color: String,
-        size: String,
-        quantity: Number,
-        price: Number,
-      },
-    ],
+    variations: [ ],
     seller: String,
     past_sold: Number,
     thumbnail: String,
