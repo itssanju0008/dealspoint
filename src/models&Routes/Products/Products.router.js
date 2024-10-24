@@ -126,18 +126,21 @@ router.get("/:id", async (req, res) => {
 
 router.get("/:slug", async (req, res) => {
   try {
-    const { slug } = req.params; // Extract slug from URL parameters
-    const product = await Product.findOne({ slug }) // Find by slug
-      .populate("brand", "name") // Populates brand and shows only the name
-      .populate("category", "name") // Populates category and shows only the name
+    const { slug } = req.params;
+    
+    // Find product by slug
+    const product = await Product.findOne({ slug })
+      .populate("brand", "name")
+      .populate("category", "name")
       .lean();
-
+    
     if (!product) {
       return res.status(404).json({ error: "Product not found." });
     }
 
     res.json(product);
   } catch (error) {
+    console.error("Error fetching product by slug:", error.message); // Log the error
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
