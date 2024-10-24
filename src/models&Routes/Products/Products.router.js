@@ -105,28 +105,11 @@ router.get("/", async (req, res) => {
 });
 
 
-// READ a single product by ID
-router.get("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const product = await Product.findById(id)
-      .populate("brand", "name") // Populates brand and shows only the name
-      .populate("category", "name") // Populates category and shows only the name
-      .lean();
-
-    if (!product) {
-      return res.status(404).json({ error: "Product not found." });
-    }
-
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
 
 router.get("/:slug", async (req, res) => {
   try {
     const { slug } = req.params;
+
     
     // Find product by slug
     const product = await Product.findOne({ slug })
