@@ -22,6 +22,7 @@ const productSchema = new mongoose.Schema(
     specifications: { type: String },
     variations: [],
     seller: String,
+    keywords:String,
     gallery:[],
     pack_of:Number,
     past_sold: Number,
