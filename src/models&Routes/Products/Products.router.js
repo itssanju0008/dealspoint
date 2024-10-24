@@ -153,6 +153,63 @@ router.get("/:slug", async (req, res) => {
   }
 });
 
+// GET products by category ID with pagination, filtering, and sorting
+router.get("/category/:categoryId", async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const { page = 1, limit = 20, filter_by = {}, sort_by } = req.query;
+
+    // Parse `filter_by` (e.g., ratings)
+    let filters = {};
+    if (filter_by.ratings) {
+      const ratings = filter_by.ratings.split(",").map(Number); // Convert ratings to an array of numbers
+      const minRating = Math.min(...ratings); // Find the minimum rating
+
+      filters.review = { $gte: minRating }; // Filter products with review >= minRating
+    }
+
+    // Handle sorting
+    let sort = {};
+    if (sort_by) {
+      switch (sort_by) {
+        case "az":
+          sort = { product_name: 1 }; // Sort by name (A-Z)
+          break;
+        case "za":
+          sort = { product_name: -1 }; // Sort by name (Z-A)
+          break;
+        case "phl":
+          sort = { price: -1 }; // Sort by price high to low
+          break;
+        case "plh":
+          sort = { price: 1 }; // Sort by price low to high
+          break;
+        case "latest":
+          sort = { _id: -1 }; // Sort by latest (assuming _id is the object id or timestamp)
+          break;
+        default:
+          sort = {}; // No sorting
+      }
+    }
+
+    // Handle pagination
+    const skip = (page - 1) * limit;
+
+    // Fetch products by category ID, applying filters, sorting, and pagination
+    const products = await Product.find({ category: categoryId, ...filters })
+      .populate("brand category") // Populate brand and category if needed
+      .sort(sort) // Apply sorting
+      .skip(skip) // Skip for pagination
+      .limit(parseInt(limit)); // Limit the results
+
+    // Send the response as a JSON array of products
+    res.json(products);
+  } catch (error) {
+    console.error("Error fetching products by category:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 // UPDATE a product by ID
 router.put("/:id", async (req, res) => {
   try {
