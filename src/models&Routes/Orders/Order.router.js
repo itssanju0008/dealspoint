@@ -36,6 +36,24 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get all orders of a specific user by user ID
+router.get('/user/:userId/orders', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    
+    // Find all orders where the customer field matches the userId
+    const userOrders = await Order.find({ customer: userId });
+
+    if (!userOrders.length) {
+      return res.status(404).json({ message: 'No orders found for this user.' });
+    }
+
+    res.status(200).json(userOrders);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Get a specific order by ID (GET)
 router.get('/:id', async (req, res) => {
   try {
