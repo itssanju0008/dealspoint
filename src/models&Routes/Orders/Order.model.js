@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 // Define the schema for Order
 const orderSchema = new Schema({
+  order_no: {
+    type: Number,
+    unique: true,
+  },
   customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -34,6 +38,6 @@ const orderSchema = new Schema({
   },
   orderDate: { type: Date, default: Date.now },
   order_amount: { type: Number, required: true },
-});
+},{ timestamps: true });
 
 module.exports = mongoose.model("Order", orderSchema);

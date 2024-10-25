@@ -11,8 +11,10 @@ router.post('/', async (req, res) => {
     const order_amount = products?.reduce(
       (acc, product) => acc + product.price * product.quantity, 0
     );
-
+    const lastOrder = await Order.findOne().sort({ order_no: -1 }).limit(1);
+    const nextOrderNo = lastOrder ? lastOrder.order_no + 1 : 8000000;
     const newOrder = new Order({
+      order_no: nextOrderNo,
       customer,
       products,
       status,
