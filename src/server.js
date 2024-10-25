@@ -11,6 +11,7 @@ const productsRouter = require("./models&Routes/Products/Products.router");
 const brandRouter = require("./models&Routes/Brands/Brands.router");
 
 const orderRouter = require("./models&Routes/Orders/Order.router");
+const userRouter = require("./models&Routes/Users/Users.router");
 const categoryRouter = require("./models&Routes/Categories/Categories.router"); // Import categoryRouter
 
 // Create HTTP server and integrate with Socket.IO
@@ -44,6 +45,8 @@ app.use("/products", productsRouter);
 app.use("/brands", brandRouter); // Assuming you also want to use brandRouter
 app.use("/categories", categoryRouter);
 app.use("/orders", orderRouter);
+app.use("/users", userRouter);
+
 
 // Starting the server
 const PORT = process.env.PORT || 6000;

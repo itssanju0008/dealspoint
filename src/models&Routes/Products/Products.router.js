@@ -70,14 +70,54 @@ router.get("/", async (req, res) => {
   try {
     // Pagination
     const page = parseInt(req.query.page) || 1; // Default page is 1
-    const perPage = parseInt(req.query.per_page) || 10; // Default per page is 10
+    const perPage = parseInt(req.query.limit) || 20; // Default limit is 20
 
-    // Sorting (sort by price, review, etc.)
-    let sortField = req.query.sort || "price"; // Default sort by 'price'
-    let sortOrder = req.query.order === "desc" ? -1 : 1; // Default sort order is ascending
+    // Sorting options: az, za, phl, plh, latest, best_seller, top_rated, new_arrival
+    let sortField = "product_name";
+    let sortOrder = 1; // Default sort order is ascending
 
-    // Filters: brand, category, price range
-    const { brand, category, minPrice, maxPrice, search } = req.query;
+    if (req.query.sort_by) {
+      switch (req.query.sort_by) {
+        case "az":
+          sortField = "product_name";
+          sortOrder = 1; // Ascending A-Z
+          break;
+        case "za":
+          sortField = "product_name";
+          sortOrder = -1; // Descending Z-A
+          break;
+        case "phl":
+          sortField = "price";
+          sortOrder = -1; // Price high to low
+          break;
+        case "plh":
+          sortField = "price";
+          sortOrder = 1; // Price low to high
+          break;
+        case "latest":
+          sortField = "_id";
+          sortOrder = -1; // Latest products first
+          break;
+        case "best_seller":
+          sortField = "past_sold";
+          sortOrder = -1; // Best seller (highest past_sold first)
+          break;
+        case "top_rated":
+          sortField = "review";
+          sortOrder = -1; // Top rated (highest review first)
+          break;
+        case "new_arrival":
+          sortField = "_id";
+          sortOrder = -1; // Newest arrivals (assuming newest have higher _id)
+          break;
+        default:
+          sortField = "product_name";
+          sortOrder = 1;
+      }
+    }
+
+    // Filters: brand, category, ratings, price range, and search
+    const { brand, category, minPrice, maxPrice, search, filter_by = {} } = req.query;
 
     const filter = {};
 
@@ -106,6 +146,13 @@ router.get("/", async (req, res) => {
       ];
     }
 
+    // Filter by ratings
+    if (filter_by.ratings) {
+      const ratings = filter_by.ratings.split(",").map(Number); // Convert ratings to an array of numbers
+      const minRating = Math.min(...ratings); // Find the minimum rating
+      filter.review = { $gte: minRating }; // Filter products with review >= minRating
+    }
+
     // Fetch products with pagination, sorting, filtering, and searching
     const products = await Product.find(filter)
       .populate("brand", "name") // Populate brand and show only the name
@@ -131,6 +178,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 
 router.get("/:slug", async (req, res) => {
   try {

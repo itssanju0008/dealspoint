@@ -5,10 +5,10 @@ const Order = require('./Order.model');
 // Create a new order (POST)
 router.post('/', async (req, res) => {
   try {
-    const { customer, products, status } = req.body;
+    const { customer, products, status,delivery_address,payment_method } = req.body;
 
     // Calculate total price based on product prices and quantities
-    const totalPrice = products.reduce(
+    const order_amount = products?.reduce(
       (acc, product) => acc + product.price * product.quantity, 0
     );
 
@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
       customer,
       products,
       status,
-      totalPrice,
+      delivery_address,payment_method,order_amount
     });
 
     const savedOrder = await newOrder.save();
