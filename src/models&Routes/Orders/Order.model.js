@@ -6,7 +6,6 @@ const orderSchema = new Schema({
   customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
   },
   delivery_address: {},
   payment_method: String,
