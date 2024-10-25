@@ -1,24 +1,37 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Order = require('./Order.model');
+const Order = require("./Order.model");
 
 // Create a new order (POST)
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const { customer, products, status,delivery_address,payment_method } = req.body;
+    const { customer, products, status, delivery_address, payment_method } =
+      req.body;
 
     // Calculate total price based on product prices and quantities
-    const order_amount = products?.reduce(
-      (acc, product) => acc + product.price * product.quantity, 0
-    );
+    const order_amount = products.reduce((acc, product) => {
+      const price = Number(product.price); // Ensure price is a number
+      const quantity = Number(product.quantity); // Ensure quantity is a number
+      return acc + price * quantity;
+    }, 0);
+
+    // Retrieve the last order number and increment it
     const lastOrder = await Order.findOne().sort({ order_no: -1 }).limit(1);
-    const nextOrderNo = lastOrder ? lastOrder.order_no + 1 : 8000000;
+    const nextOrderNo = lastOrder ? lastOrder.order_no + 1 : 8000000; // Start from 8000000 if no orders exist
+console.log({lastOrder});
+
+    // Ensure nextOrderNo is a number
+    if (isNaN(nextOrderNo)) {
+      return res.status(500).json({ error: "Failed to generate order number" });
+    }
     const newOrder = new Order({
       order_no: nextOrderNo,
       customer,
       products,
       status,
-      delivery_address,payment_method,order_amount
+      delivery_address,
+      payment_method,
+      order_amount,
     });
 
     const savedOrder = await newOrder.save();
@@ -29,7 +42,7 @@ router.post('/', async (req, res) => {
 });
 
 // Get all orders (GET)
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const orders = await Order.find();
     res.status(200).json(orders);
@@ -39,15 +52,17 @@ router.get('/', async (req, res) => {
 });
 
 // Get all orders of a specific user by user ID
-router.get('/user/:userId/orders', async (req, res) => {
+router.get("/user/:userId/orders", async (req, res) => {
   try {
     const userId = req.params.userId;
-    
+
     // Find all orders where the customer field matches the userId
     const userOrders = await Order.find({ customer: userId });
 
     if (!userOrders.length) {
-      return res.status(404).json({ message: 'No orders found for this user.' });
+      return res
+        .status(404)
+        .json({ message: "No orders found for this user." });
     }
 
     res.status(200).json(userOrders);
@@ -57,11 +72,11 @@ router.get('/user/:userId/orders', async (req, res) => {
 });
 
 // Get a specific order by ID (GET)
-router.get('/:id', async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
-      return res.status(404).json({ error: 'Order not found' });
+      return res.status(404).json({ error: "Order not found" });
     }
     res.status(200).json(order);
   } catch (err) {
@@ -70,13 +85,14 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update an order by ID (PUT)
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const { customer, products, status } = req.body;
 
     // Calculate new total price if products are updated
     const totalPrice = products.reduce(
-      (acc, product) => acc + product.price * product.quantity, 0
+      (acc, product) => acc + product.price * product.quantity,
+      0
     );
 
     const updatedOrder = await Order.findByIdAndUpdate(
@@ -86,7 +102,7 @@ router.put('/:id', async (req, res) => {
     );
 
     if (!updatedOrder) {
-      return res.status(404).json({ error: 'Order not found' });
+      return res.status(404).json({ error: "Order not found" });
     }
 
     res.status(200).json(updatedOrder);
@@ -96,13 +112,13 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete an order by ID (DELETE)
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const deletedOrder = await Order.findByIdAndDelete(req.params.id);
     if (!deletedOrder) {
-      return res.status(404).json({ error: 'Order not found' });
+      return res.status(404).json({ error: "Order not found" });
     }
-    res.status(200).json({ message: 'Order deleted successfully' });
+    res.status(200).json({ message: "Order deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
