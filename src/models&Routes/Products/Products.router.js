@@ -33,15 +33,17 @@ router.post("/", async (req, res) => {
       });
     }
 
+    // Validate the brand field if it’s provided
+    const validBrand = brand && mongoose.Types.ObjectId.isValid(brand) ? brand : undefined;
+
     const newProduct = new Product({
       product_name,
       keywords,
-      brand,
+      brand: validBrand,
       category,
       pack_of,
       pack,
       type,
-      keywords,
       review,
       gallery,
       review_count,
@@ -59,11 +61,10 @@ router.post("/", async (req, res) => {
 
     res.status(201).json(savedProduct);
   } catch (error) {
-    console.error("Error saving product:", error.message); // More specific error message
+    console.error("Error saving product:", error.message);
     res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
-});
-
+})
 
 // READ all products with pagination, sorting, filtering, and searching
 router.get("/", async (req, res) => {
