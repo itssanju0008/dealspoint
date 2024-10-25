@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("./Products.model"); // Adjust the file path as needed
+const mongoose = require("mongoose");
 
 // CREATE a new product
 router.post("/", async (req, res) => {
