@@ -18,7 +18,6 @@ router.post("/", async (req, res) => {
     // Retrieve the last order number and increment it
     const lastOrder = await Order.findOne().sort({ order_no: -1 }).limit(1);
     const nextOrderNo = lastOrder ? lastOrder.order_no + 1 : 8000000; // Start from 8000000 if no orders exist
-console.log({lastOrder});
 
     // Ensure nextOrderNo is a number
     if (isNaN(nextOrderNo)) {

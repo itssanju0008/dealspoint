@@ -27,7 +27,8 @@ app.use(
       "http://localhost:3002",
       "https://carrystyle.in",
       'https://www.carrystyle.in',
-      'https://www.cd.quicsy.com'
+      'https://www.cd.quicsy.com',
+      'https://www.crazydeals.buzz/'
     ], // Fixing the CORS allowed origins
   })
 );
