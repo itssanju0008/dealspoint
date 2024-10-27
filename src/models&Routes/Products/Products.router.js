@@ -212,10 +212,9 @@ router.get("/category/:categoryId", async (req, res) => {
     // Parse `filter_by` (e.g., ratings)
     let filters = {};
     if (filter_by.ratings) {
-      const ratings = filter_by.ratings.split(",").map(Number); // Convert ratings to an array of numbers
-      const minRating = Math.min(...ratings); // Find the minimum rating
-
-      filters.review = { $gte: minRating }; // Filter products with review >= minRating
+      const ratings = filter_by.ratings.split(",").map(Number);
+      const minRating = Math.min(...ratings);
+      filters.review = { $gte: minRating };
     }
 
     // Handle sorting
@@ -223,42 +222,57 @@ router.get("/category/:categoryId", async (req, res) => {
     if (sort_by) {
       switch (sort_by) {
         case "az":
-          sort = { product_name: 1 }; // Sort by name (A-Z)
+          sort = { product_name: 1 };
           break;
         case "za":
-          sort = { product_name: -1 }; // Sort by name (Z-A)
+          sort = { product_name: -1 };
           break;
         case "phl":
-          sort = { price: -1 }; // Sort by price high to low
+          sort = { price: -1 };
           break;
         case "plh":
-          sort = { price: 1 }; // Sort by price low to high
+          sort = { price: 1 };
           break;
         case "latest":
-          sort = { _id: -1 }; // Sort by latest (assuming _id is the object id or timestamp)
+          sort = { _id: -1 };
           break;
         default:
-          sort = {}; // No sorting
+          sort = {};
       }
     }
 
     // Handle pagination
-    const skip = (page - 1) * limit;
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const skip = (pageNum - 1) * limitNum;
 
-    // Fetch products by category ID, applying filters, sorting, and pagination
+    // Count total products for the given category and filters
+    const totalProducts = await Product.countDocuments({ category: categoryId, ...filters });
+    const totalPages = Math.ceil(totalProducts / limitNum);
+
+    // Fetch products by category ID with filters, sorting, and pagination
     const products = await Product.find({ category: categoryId, ...filters })
-      .populate("brand category") // Populate brand and category if needed
-      .sort(sort) // Apply sorting
-      .skip(skip) // Skip for pagination
-      .limit(parseInt(limit)); // Limit the results
+      .populate("brand category")
+      .sort(sort)
+      .skip(skip)
+      .limit(limitNum);
 
-    // Send the response as a JSON array of products
-    res.json(products);
+    // Send response with products and pagination details
+    res.json({
+      products,
+      pagination: {
+        currentPage: pageNum,
+        totalPages,
+        totalItems: totalProducts,
+        itemsPerPage: limitNum,
+      },
+    });
   } catch (error) {
     console.error("Error fetching products by category:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 
 // UPDATE a product by ID
 router.put("/:id", async (req, res) => {
