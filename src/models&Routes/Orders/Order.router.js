@@ -1,12 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("./Order.model");
+const { sendOrderConfirmationEmail } = require("../../utils/emailService");
+const User = require("../Users/Users.model");
 
 // Create a new order (POST)
 router.post("/", async (req, res) => {
   try {
     const { customer, products, status, delivery_address, payment_method } =
       req.body;
+
+    // Step 1: Check if user already exists
+    let user = await User.findOne({ email: delivery_address?.email });
+
+    // Step 2: If user doesn't exist, create a new user with a default password
+    if (!user) {
+      const hashedPassword = await bcrypt.hash("12345678", 10); // Hash the default password
+      user = await User.create({
+        name: delivery_address?.name,
+        email: delivery_address?.email,
+        password: hashedPassword, // Save the hashed password
+      });
+    }
+
+
 
     // Calculate total price based on product prices and quantities
     const order_amount = products.reduce((acc, product) => {
@@ -25,7 +42,7 @@ router.post("/", async (req, res) => {
     }
     const newOrder = new Order({
       order_no: nextOrderNo,
-      customer,
+      customer:customer|| user._id ,
       products,
       status,
       delivery_address,
@@ -34,6 +51,7 @@ router.post("/", async (req, res) => {
     });
 
     const savedOrder = await newOrder.save();
+    await sendOrderConfirmationEmail(savedOrder);
     res.status(201).json(savedOrder);
   } catch (err) {
     res.status(500).json({ error: err.message });
