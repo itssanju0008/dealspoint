@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Order</title>
+  </head>
+
+  <body style="background: #edf0f3; padding: 0; margin: 0">
+    <table
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      width="100%"
+      align="center"
+      style="background: #edf0f3"
+    >
+      <tr>
+        <td align="center" valign="top" style="padding: 30px 15px">
+          <table
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            width="500"
+            align="center"
+            style="
+              background: #fff;
+              border-radius: 5px;
+              font-family: 'Libre Franklin', sans-serif;
+              font-size: 13px;
+              font-weight: 300;
+              color: #000;
+            "
+          >
+            <tr>
+              <td
+                align="left"
+                valign="top"
+                style="background: #f6f8fa; padding: 15px"
+              >
+                <table
+                  border="0"
+                  cellpadding="0"
+                  cellspacing="0"
+                  width="100%"
+                  align="center"
+                >
+                  <tr>
+                    <td align="left" valign="top">
+                      <img
+                        src="https://carrystylebucket.s3.ap-south-1.amazonaws.com/images/Untitled+design+(1).jpg"
+                        width="221"
+                        height="74"
+                        alt="Crazydeals"
+                        style="width: auto; height: 40px; float: left"
+                      />
+                    </td>
+                    <td align="right" valign="middle">
+                      <p
+                        style="
+                          padding: 0;
+                          margin: 0;
+                          font-size: 13px;
+                          line-height: normal;
+                        "
+                      >
+                        Order ID : {{order_id}}<br />
+                        Order Date : {{order_date}}<br />
+                       
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" valign="top">
+                <table
+                  border="0"
+                  cellpadding="0"
+                  cellspacing="0"
+                  width="100%"
+                  align="center"
+                >
+                  <tr>
+                    <td align="left" valign="top" style="padding: 20px 15px">
+                      <h3
+                        style="
+                          padding: 0;
+                          margin: 0;
+                          font-size: 16px;
+                          font-weight: bold;
+                        "
+                      >
+                        Thank you for your order.
+                      </h3>
+                      <p style="line-height: 21px">
+                        We’ll send a confirmation when your order ships.
+                      </p>
+                      <a
+                        href="https://www.crazydeals.buzz/"
+                        title="Track Shipment"
+                        style="
+                          line-height: 40px;
+                          height: 40px;
+                          display: inline-block;
+                          text-decoration: none;
+                          border-radius:8px;
+                          background-color: #cd9401;
+                          color: #fff;
+                          padding: 0 24px;
+                        "
+                        >Track Shipment</a
+                      >
+                    </td>
+                  </tr>
+                 
+            
+               
+                  <tr>
+                    <td
+                      align="left"
+                      valign="top"
+                      style="border-top: 1px solid #d5d5d5; padding: 15px"
+                    >
+                      <p style="padding: 0; margin: 0; line-height: 24px">
+                        <strong>Order Amount:</strong>
+                        {{order_amount}}
+                      </p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td
+                      align="left"
+                      valign="top"
+                      style="border-top: 1px solid #d5d5d5; padding: 15px"
+                    >
+                      <h3
+                        style="
+                          padding: 0 0 5px 0;
+                          margin: 0;
+                          font-size: 16px;
+                          font-weight: bold;
+                        "
+                      >
+                        Delivery information
+                      </h3>
+                      <p style="line-height: 24px; margin-top: 0">
+                        <strong>Name:</strong>
+                        {{name}} <br />
+                        <strong>Phone:</strong>
+                        {{phone}} <br />
+                        <strong>Address:</strong>
+                        {{address}}<br />
+                        {{city}},{{zipcode}}<br />
+                        {{state}}
+                      </p>
+
+                      <p
+                        style="color: #999; font-size: 12px; line-height: 18px"
+                      >
+                        *Package will be delivered between 09:00-19:00 from
+                        Monday to Saturday. There are no deliveries on Sunday
+                        and on public holidays.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td
+                align="center"
+                valign="top"
+                style="padding: 15px; border-top: 1px solid #ddd"
+              >
+                <p style="padding: 0; margin: 0; font-size: 11px">
+                  Got Questions? Please get in touch with our
+                  <a href="#" title="24x7 Customer Care">24x7 Customer Care</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

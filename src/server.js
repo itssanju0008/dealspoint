@@ -13,6 +13,7 @@ const brandRouter = require("./models&Routes/Brands/Brands.router");
 const orderRouter = require("./models&Routes/Orders/Order.router");
 const userRouter = require("./models&Routes/Users/Users.router");
 const categoryRouter = require("./models&Routes/Categories/Categories.router"); // Import categoryRouter
+const { sendOrderConfirmationEmail } = require("./utils/emailService");
 
 // Create HTTP server and integrate with Socket.IO
 const server = http.createServer(app);
@@ -35,6 +36,8 @@ app.use(
 
 // Test route
 app.get("/test", (req, res) => {
+  const savedOrder={delivery_address:{email:'sanju682295@gmail.com'},order_no:'8999899',order_amount:699}
+  sendOrderConfirmationEmail(savedOrder,'user');
   return res.json({
     message: "API is working",
     port: process?.env?.PORT,

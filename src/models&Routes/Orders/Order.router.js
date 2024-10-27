@@ -41,7 +41,7 @@ router.post("/", async (req, res) => {
     }
     const newOrder = new Order({
       order_no: nextOrderNo,
-      customer:customer|| user._id ,
+      customer: customer || user._id,
       products,
       status,
       delivery_address,
@@ -50,7 +50,12 @@ router.post("/", async (req, res) => {
     });
 
     const savedOrder = await newOrder.save();
-    await sendOrderConfirmationEmail(savedOrder);
+    if(user){
+      await sendOrderConfirmationEmail(savedOrder,'user');
+    }else{
+      await sendOrderConfirmationEmail(savedOrder,'nouser');
+    }
+
     res.status(201).json(savedOrder);
   } catch (err) {
     res.status(500).json({ error: err.message });
