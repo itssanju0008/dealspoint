@@ -3,6 +3,7 @@ const router = express.Router();
 const Order = require("./Order.model");
 const { sendOrderConfirmationEmail } = require("../../utils/emailService");
 const User = require("../Users/Users.model");
+const bcrypt = require("bcrypt");
 
 // Create a new order (POST)
 router.post("/", async (req, res) => {
@@ -22,8 +23,6 @@ router.post("/", async (req, res) => {
         password: hashedPassword, // Save the hashed password
       });
     }
-
-
 
     // Calculate total price based on product prices and quantities
     const order_amount = products.reduce((acc, product) => {
