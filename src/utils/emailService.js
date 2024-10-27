@@ -33,7 +33,6 @@ function formatDate(dateString) {
 }
 // Function to send order confirmation email
 async function sendOrderConfirmationEmail(order, type) {
-
   let mailOptions = {};
   const replacement = {
     order_id: order.order_no,
@@ -47,8 +46,8 @@ async function sendOrderConfirmationEmail(order, type) {
     state: order?.delivery_address?.state,
     email: order?.delivery_address?.email,
   };
-  console.log({order,replacement});
-  
+  console.log({ order, replacement });
+
   const html = loadHtmlTemplate("./emailTemplate.html", replacement);
   const html1 = loadHtmlTemplate("./emailTemplate.html", replacement);
   if (type === "user") {
@@ -67,8 +66,63 @@ async function sendOrderConfirmationEmail(order, type) {
     };
   }
 
+  const mailData = {
+    from: `New Order <${process.env.EMAIL_USER}>`,
+    to: "sanju682295@gmail.com",
+    subject: "New Order Received.",
+    html: `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>New Order Notification</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                background-color: #f4f4f4;
+            }
+            .container {
+                max-width: 600px;
+                margin: auto;
+                background: white;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+            }
+            h2 {
+                color: #333;
+            }
+            .footer {
+                margin-top: 20px;
+                font-size: 12px;
+                color: #666;
+            }
+        </style>
+    </head>
+    <body>
+
+    <div class="container">
+        <h2>New Order Received!</h2>
+        <p>You have received a new order.</p>
+        <p>Please check your dashboard for more details.</p>
+    </div>
+
+    <div class="footer">
+        <p>&copy; ${new Date().getFullYear()} Crazydeals</p>
+    </div>
+
+    </body>
+    </html>
+    `,
+  };
+
   try {
     await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailData);
   } catch (error) {}
 }
 
