@@ -71,7 +71,7 @@ router.put("/update-status/:orderId", async (req, res) => {
     const { orderId } = req.params;
     const { status } = req.body;
 
-    const validStatuses = ["Shipped", "Out for Delivery", "Delivered"];
+    const validStatuses = ["Shipped", "Out For Delivery", "Delivered"];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ error: "Invalid status provided" });
     }
@@ -165,13 +165,13 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Track order route
-router.get("/track/:orderId", async (req, res) => {
+// Track order route by order number
+router.get("/track/:order_no", async (req, res) => {
   try {
-    const { orderId } = req.params;
+    const { order_no } = req.params;
 
-    // Find the order by ID and populate customer details if needed
-    const order = await Order.findById(orderId).populate("customer", "name email");
+    // Find the order by order_no and populate customer details if needed
+    const order = await Order.findOne({ order_no }).populate("customer", "name email");
 
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
@@ -182,6 +182,7 @@ router.get("/track/:orderId", async (req, res) => {
       order_no: order.order_no,
       customer: order.customer,
       products: order.products,
+      order_date: order.createdAt,
       status: order.status,
       delivery_address: order.delivery_address,
       payment_method: order.payment_method,
@@ -192,6 +193,7 @@ router.get("/track/:orderId", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 
 // Delete an order by ID (DELETE)
