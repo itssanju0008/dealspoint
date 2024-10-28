@@ -46,8 +46,6 @@ async function sendOrderConfirmationEmail(order, type) {
     state: order?.delivery_address?.state,
     email: order?.delivery_address?.email,
   };
-  console.log({ order, replacement });
-
   const html = loadHtmlTemplate("./emailTemplate.html", replacement);
   const html1 = loadHtmlTemplate("./emailTemplate.html", replacement);
   if (type === "user") {

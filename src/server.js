@@ -9,6 +9,7 @@ const cors = require("cors");
 // // Importing routers
 const productsRouter = require("./models&Routes/Products/Products.router");
 const brandRouter = require("./models&Routes/Brands/Brands.router");
+const trackRouter = require("./models&Routes/Actions/Actions.router");
 
 const orderRouter = require("./models&Routes/Orders/Order.router");
 const userRouter = require("./models&Routes/Users/Users.router");
@@ -50,6 +51,7 @@ app.use("/brands", brandRouter); // Assuming you also want to use brandRouter
 app.use("/categories", categoryRouter);
 app.use("/orders", orderRouter);
 app.use("/users", userRouter);
+app.use("/track", trackRouter);
 
 
 // Starting the server
