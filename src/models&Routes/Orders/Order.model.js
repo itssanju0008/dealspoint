@@ -38,6 +38,7 @@ const orderSchema = new Schema({
   },
   orderDate: { type: Date, default: Date.now },
   order_amount: { type: Number, required: true },
+  order_process:[]
 },{ timestamps: true });
 
 module.exports = mongoose.model("Order", orderSchema);
