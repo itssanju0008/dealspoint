@@ -165,6 +165,35 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// Track order route
+router.get("/track/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    // Find the order by ID and populate customer details if needed
+    const order = await Order.findById(orderId).populate("customer", "name email");
+
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    // Respond with the order info including the status history in order_process
+    res.status(200).json({
+      order_no: order.order_no,
+      customer: order.customer,
+      products: order.products,
+      status: order.status,
+      delivery_address: order.delivery_address,
+      payment_method: order.payment_method,
+      order_amount: order.order_amount,
+      order_process: order.order_process, // History of status changes with timestamps
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 // Delete an order by ID (DELETE)
 router.delete("/:id", async (req, res) => {
   try {
