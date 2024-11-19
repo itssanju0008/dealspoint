@@ -11,6 +11,8 @@ const load = {
   url: {
     type: String,
     required: true,
+    unique: true,
+    
   },
 };
 
