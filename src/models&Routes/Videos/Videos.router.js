@@ -3,7 +3,7 @@ const Video = require("./Videos.model");
 const router = express.Router();
 
 // Create a new video
-router.post("/videos", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { name, image, url } = req.body;
 
@@ -23,7 +23,7 @@ router.post("/videos", async (req, res) => {
 });
 
 // Get all videos
-router.get("/videos", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const videos = await Video.find();
     res.status(200).json(videos);
@@ -33,7 +33,7 @@ router.get("/videos", async (req, res) => {
 });
 
 // Get a video by ID
-router.get("/videos/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const video = await Video.findById(id);
@@ -49,7 +49,7 @@ router.get("/videos/:id", async (req, res) => {
 });
 
 // Update a video by ID
-router.put("/videos/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { name, image, url } = req.body;
@@ -71,7 +71,7 @@ router.put("/videos/:id", async (req, res) => {
 });
 
 // Delete a video by ID
-router.delete("/videos/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
