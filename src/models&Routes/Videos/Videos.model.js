@@ -12,11 +12,18 @@ const load = {
     type: String,
     required: true,
     unique: true,
-    
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    index: { expires: "7h" }, 
   },
 };
 
-const videoSchema = new mongoose.Schema(load, { versionKey: false });
+const videoSchema = new mongoose.Schema(load, {
+  versionKey: false,
+  timestamps: true,
+});
 
 const Video = mongoose.model("Video", videoSchema);
 
