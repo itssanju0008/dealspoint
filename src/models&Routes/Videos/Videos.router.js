@@ -3,7 +3,7 @@ const Video = require("./Videos.model");
 const { default: axios } = require("axios");
 const router = express.Router();
 const FormData = require("form-data");
-
+const { v4: uuidv4 } = require("uuid");
 // Create a new video
 
 router.post("/", async (req, res) => {
@@ -22,11 +22,11 @@ router.post("/", async (req, res) => {
       url: image, // Image URL
       responseType: "stream", // Fetch as a stream
     });
-
+    const uniqueFilename = `uploaded_image_${Date.now()}_${uuidv4()}.jpg`;
     // Step 2: Prepare FormData for the upload
     const formData = new FormData();
     formData.append("file", imageResponse.data, {
-      filename: "uploaded_image.jpg", // Specify the filename
+      filename: uniqueFilename, // Specify the filename
       contentType: imageResponse.headers["content-type"], // Pass the content type from the response
     });
 
