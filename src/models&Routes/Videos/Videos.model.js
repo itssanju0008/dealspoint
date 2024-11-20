@@ -24,8 +24,16 @@ const load = {
   },
   likes: {
     type: Number,
-    default: () => Math.floor(Math.random() * 9000) + 1000, // Random number between 1000 and 9999
+    default: function () {
+      return Math.floor(Math.random() * (this.views - 1000)) + 1000; // Less than views
+    },
     min: 1000,
+    validate: {
+      validator: function (value) {
+        return value < this.views;
+      },
+      message: "Likes must be less than views.",
+    },
   },
   votes: {
     type: Number,
