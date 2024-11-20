@@ -33,6 +33,7 @@ app.use(
       'https://www.cd.quicsy.com',
       'https://www.crazydeals.buzz',
       'https://tera-tau.vercel.app',
+      'https://xnjoy.vercel.app',
     ], // Fixing the CORS allowed origins
   })
 );
