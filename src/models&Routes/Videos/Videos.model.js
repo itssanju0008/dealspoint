@@ -17,6 +17,21 @@ const load = {
     type: Date,
     default: Date.now,
   },
+  views: {
+    type: Number,
+    default: () => Math.floor(Math.random() * 9000) + 1000, // Random number between 1000 and 9999
+    min: 1000,
+  },
+  likes: {
+    type: Number,
+    default: () => Math.floor(Math.random() * 9000) + 1000, // Random number between 1000 and 9999
+    min: 1000,
+  },
+  votes: {
+    type: Number,
+    default: () => Math.floor(Math.random() * 9000) + 1000, // Random number between 1000 and 9999
+    min: 1000,
+  },
 };
 
 const videoSchema = new mongoose.Schema(load, {

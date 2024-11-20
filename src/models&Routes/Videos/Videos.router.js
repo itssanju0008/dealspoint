@@ -65,16 +65,31 @@ router.post("/", async (req, res) => {
       .json({ error: "An error occurred while uploading the image" });
   }
 });
-// Get all videos
+
+// Get all videos with pagination
 router.get("/", async (req, res) => {
   try {
-    const videos = await Video.find();
-    res.status(200).json(videos);
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+
+    const videos = await Video.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    const total = await Video.countDocuments();
+
+    res.status(200).json({
+      data: videos,
+      total,
+      page: parseInt(page),
+      limit: parseInt(limit),
+      totalPages: Math.ceil(total / limit),
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-
 // Get a video by ID
 router.get("/:id", async (req, res) => {
   try {
@@ -90,6 +105,87 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Like a video
+router.post("/:id/like", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const video = await Video.findByIdAndUpdate(
+      id,
+      { $inc: { likes: 1 } },
+      { new: true }
+    );
+
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+
+    res.status(200).json({ message: "Like added", video });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Dislike a video
+router.post("/:id/dislike", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const video = await Video.findByIdAndUpdate(
+      id,
+      { $inc: { dislikes: 1 } },
+      { new: true }
+    );
+
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+
+    res.status(200).json({ message: "Dislike added", video });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Increment views
+router.post("/:id/view", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const video = await Video.findByIdAndUpdate(
+      id,
+      { $inc: { views: 1 } },
+      { new: true }
+    );
+
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+
+    res.status(200).json({ message: "View incremented", video });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Increment votes
+router.post("/:id/vote", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const video = await Video.findByIdAndUpdate(
+      id,
+      { $inc: { votes: 1 } },
+      { new: true }
+    );
+
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+
+    res.status(200).json({ message: "Vote incremented", video });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 // Update a video by ID
 router.put("/:id", async (req, res) => {
