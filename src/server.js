@@ -31,7 +31,8 @@ app.use(
       "https://carrystyle.in",
       'https://www.carrystyle.in',
       'https://www.cd.quicsy.com',
-      'https://www.crazydeals.buzz'
+      'https://www.crazydeals.buzz',
+      'https://tera-tau.vercel.app',
     ], // Fixing the CORS allowed origins
   })
 );
