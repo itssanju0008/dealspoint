@@ -16,7 +16,6 @@ const load = {
   createdAt: {
     type: Date,
     default: Date.now,
-    index: { expires: "7h" }, 
   },
 };
 
