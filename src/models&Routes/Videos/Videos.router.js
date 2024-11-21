@@ -94,8 +94,12 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const video = await Video.findById(id);
+    let video = await Video.findById(id);
 
+    // If not found by ID, attempt to find by URL
+    if (!video) {
+      video = await Video.findOne({ url: id });
+    }
     if (!video) {
       return res.status(404).json({ error: "Video not found" });
     }
@@ -185,7 +189,6 @@ router.post("/:id/vote", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 // Update a video by ID
 router.put("/:id", async (req, res) => {
