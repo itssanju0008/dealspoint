@@ -4,6 +4,7 @@ const { default: axios } = require("axios");
 const router = express.Router();
 const FormData = require("form-data");
 const { v4: uuidv4 } = require("uuid");
+const mongoose = require("mongoose");
 // Create a new video
 
 router.post("/", async (req, res) => {
@@ -90,16 +91,27 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Get a video by ID
+// Helper function to find a video by ID or URL
+const findVideoByIdOrUrl = async (identifier) => {
+  // Check if the identifier is a valid ObjectId
+  const isObjectId = mongoose.Types.ObjectId.isValid(identifier);
+
+  if (isObjectId) {
+    // Try to find by ObjectId
+    const video = await Video.findById(identifier);
+    if (video) return video;
+  }
+
+  // If not ObjectId or video not found, try to find by URL
+  return await Video.findOne({ url: identifier });
+};
+// Get a video by ID or URL
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    let video = await Video.findById(id);
 
-    // If not found by ID, attempt to find by URL
-    if (!video) {
-      video = await Video.findOne({ url: id });
-    }
+    const video = await findVideoByIdOrUrl(id);
+
     if (!video) {
       return res.status(404).json({ error: "Video not found" });
     }
@@ -109,14 +121,6 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Helper function to find a video by ID or URL
-const findVideoByIdOrUrl = async (identifier) => {
-  let video = await Video.findById(identifier);
-  if (!video) {
-    video = await Video.findOne({ url: identifier });
-  }
-  return video;
-};
 
 // Like a video
 router.post("/:identifier/like", async (req, res) => {
