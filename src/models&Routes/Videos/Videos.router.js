@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 
 router.post("/", async (req, res) => {
   try {
-    const { name, image, url, type } = req.body;
+    const { name, image, url, type, category } = req.body;
 
     if (!image || !url) {
       return res
@@ -49,6 +49,7 @@ router.post("/", async (req, res) => {
     // Step 5: Save the video details in the database
     const video = new Video({
       name,
+      category,
       type,
       image: uploadedImageUrl, // Use the URL of the uploaded image
       url,

@@ -8,6 +8,9 @@ const load = {
     type: String,
     required: true,
   },
+  category:{
+    type: String,
+  },
   type: {
     type: String,
   },
