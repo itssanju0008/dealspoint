@@ -8,6 +8,9 @@ const load = {
     type: String,
     required: true,
   },
+  type: {
+    type: String,
+  },
   url: {
     type: String,
     required: true,
