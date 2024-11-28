@@ -10,7 +10,7 @@ const cors = require("cors");
 const productsRouter = require("./models&Routes/Products/Products.router");
 const brandRouter = require("./models&Routes/Brands/Brands.router");
 const trackRouter = require("./models&Routes/Actions/Actions.router");
-
+const affiliateRouter = require("./models&Routes/Affiliate/Affiliate.router");
 const orderRouter = require("./models&Routes/Orders/Order.router");
 const videoRouter = require("./models&Routes/Videos/Videos.router");
 const userRouter = require("./models&Routes/Users/Users.router");
@@ -56,6 +56,7 @@ app.use("/orders", orderRouter);
 app.use("/users", userRouter);
 app.use("/track", trackRouter);
 app.use("/videos", videoRouter);
+app.use("/affiliate", videoRouter);
 
 
 // Starting the server
