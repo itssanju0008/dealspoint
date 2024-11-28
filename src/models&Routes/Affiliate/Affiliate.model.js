@@ -4,6 +4,7 @@ const load = {
   code: {
     type: String,
     required: true,
+    unique: true,
   },
   count: {
     type: Number,

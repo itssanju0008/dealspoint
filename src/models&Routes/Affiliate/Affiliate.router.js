@@ -2,6 +2,34 @@ const express = require("express");
 const Affiliate = require("./Affiliate.model"); // Assuming this is the path to the model
 const router = express.Router();
 
+router.post("/upsert", async (req, res) => {
+    try {
+      const { code } = req.body;
+  
+      if (!code) {
+        return res.status(400).json({ message: "Code is required." });
+      }
+  
+      const updatedAffiliate = await Affiliate.findOneAndUpdate(
+        { code }, // Find affiliate by code
+        { $inc: { count: 1 } }, // Increment count if exists
+        { upsert: true, new: true, setDefaultsOnInsert: true } // Create if doesn't exist
+      );
+  
+      res.status(200).json({
+        message: updatedAffiliate.count > 1 
+          ? "Affiliate count incremented successfully." 
+          : "Affiliate created successfully.",
+        affiliate: updatedAffiliate,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Failed to process the request.",
+        error: error.message,
+      });
+    }
+  });
+  
 // CREATE a new affiliate
 router.post("/", async (req, res) => {
   try {
