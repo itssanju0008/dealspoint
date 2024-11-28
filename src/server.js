@@ -56,7 +56,7 @@ app.use("/orders", orderRouter);
 app.use("/users", userRouter);
 app.use("/track", trackRouter);
 app.use("/videos", videoRouter);
-app.use("/affiliate", videoRouter);
+app.use("/affiliate", affiliateRouter);
 
 
 // Starting the server
