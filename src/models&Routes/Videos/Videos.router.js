@@ -57,7 +57,12 @@ router.post("/", async (req, res) => {
 
     await video.save();
 
-    res.status(201).json(video);
+    res.status(201).json({
+      name: video.name,
+      image: video.image,
+      url: video.url,
+    });
+    
   } catch (error) {
     console.error(
       "Error uploading image:",
