@@ -4,7 +4,6 @@ const load = {
   user_id: {
     type: String,
     required: true,
-    unique: true,
   },
   count: {
     type: Number,
