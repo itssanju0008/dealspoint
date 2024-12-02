@@ -14,6 +14,7 @@ const affiliateRouter = require("./models&Routes/Affiliate/Affiliate.router");
 const orderRouter = require("./models&Routes/Orders/Order.router");
 const videoRouter = require("./models&Routes/Videos/Videos.router");
 const userRouter = require("./models&Routes/Users/Users.router");
+const visitsRouter = require("./models&Routes/Visitors/Visitors.router");
 const categoryRouter = require("./models&Routes/Categories/Categories.router"); // Import categoryRouter
 const { sendOrderConfirmationEmail } = require("./utils/emailService");
 
@@ -59,6 +60,7 @@ app.use("/users", userRouter);
 app.use("/track", trackRouter);
 app.use("/videos", videoRouter);
 app.use("/affiliate", affiliateRouter);
+app.use("/visits", visitsRouter);
 
 
 // Starting the server
